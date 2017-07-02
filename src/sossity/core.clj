@@ -28,7 +28,7 @@
 (defn random-str [length]
   (apply str (take length (repeatedly random-char))))
 
-(defn sub-suffix [] (str "_sub-" (random-str 6)))
+(defn sub-suffix [] (str "-sub-"))
 
 (def app-prefix "googleappengine_app")
 (def df-prefix "googlecli_dataflow")
@@ -171,7 +171,7 @@
   (let [item_name (clojure.string/lower-case (str node "-sink"))
         proj_name (:project conf)
         resource_version (get-in conf [:config-file :config :sink-resource-version])
-        sub_name (str (attr g (first (in-edges g node)) :name) (attr g node :sub-name))
+        sub_name (str (attr g (first (in-edges g node)) :name) (attr g node :sub-name) (clojure.string/lower-case (str node)))
         bucket_name (attr g node :bucket)
         zone (:region conf)
         replicas (or (attr g node :replicas) 1)
@@ -180,6 +180,9 @@
         rsys_pass (attr g node :rsys_pass)
         rsys_user (attr g node :rsys_user)
         dataset_name (attr g node :dataset_name)
+        time_window (attr g node :time_window)
+        topic_name (attr g node :topic_name)
+        docker_image (first (remove clojure.string/blank? [(attr g node :docker_image) (get-in conf [:config-file :config :default-sink-docker-image])]))
         batch-size (or (attr g node :batch_size) sink-buffer-size)
         merge_insert (attr g node :merge_insert)
         depends-on (let    [s [(str "google_pubsub_subscription." sub_name)]]
@@ -189,14 +192,27 @@
         output {item_name {:name item_name :resource_version [resource_version]
                            :depends_on depends-on
                            :optional_args {:replicas replicas}
-                           :docker_image (get-in conf [:config-file :config :default-sink-docker-image]) :container_name sink-container :zone zone
-                           :env_args {:num_retries sink-retries :batch_size batch-size :proj_name proj_name :sub_name sub_name :bucket_name bucket_name :rsys_pass rsys_pass
-                                      :sink_type sink_type :dataset_name dataset_name :rsys_user rsys_user :rsys_table rsys_table :error_topic error-topic :merge_insert merge_insert}}}]
+                           :docker_image docker_image :container_name sink-container
+                           :zone zone
+                           :env_args {:num_retries sink-retries
+                                      :batch_size batch-size
+                                      :proj_name proj_name
+                                      :sub_name sub_name
+                                      :topic_name topic_name
+                                      :bucket_name bucket_name
+                                      :rsys_pass rsys_pass
+                                      :time_window time_window
+                                      :sink_type sink_type
+                                      :dataset_name dataset_name
+                                      :rsys_user rsys_user
+                                      :rsys_table rsys_table
+                                      :error_topic error-topic
+                                      :merge_insert merge_insert}}}]
     output))
 
 (defn create-sub [g edge node]
   "make a subscription for every node of type gcs based on the inbound edge [for now should only be 1 inbound edge]"
-  (let [name (str (attr g edge :name) (attr g node :sub-name))
+  (let [name (str (attr g edge :name) (attr g node :sub-name) (clojure.string/lower-case (str node)))
         topic (attr g edge :name)]
     {name {:name name :topic topic :depends_on [(str pt-prefix "." (attr g edge :name))]}}))
 

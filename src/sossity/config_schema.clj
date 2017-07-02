@@ -51,6 +51,9 @@
                 (s/optional-key :bucket) s/Str
                 (s/optional-key :replicas) s/Int
                 (s/optional-key :batch_size) s/Int
+                (s/optional-key :time_window) s/Int
+                (s/optional-key :docker_image) s/Str
+                (s/optional-key :topic_name) s/Str
                 (s/optional-key :bigQueryDataset) s/Str
                 (s/optional-key :bigQueryTable) s/Str
                 (s/optional-key :error-out) s/Bool
