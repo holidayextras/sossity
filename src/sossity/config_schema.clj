@@ -54,6 +54,9 @@
                 (s/optional-key :time_window) s/Int
                 (s/optional-key :docker_image) s/Str
                 (s/optional-key :topic_name) s/Str
+                (s/optional-key :cloudsql_vm) s/Str
+                (s/optional-key :MYSQLUSER) s/Str
+                (s/optional-key :MYSQLPASS) s/Str
                 (s/optional-key :bigQueryDataset) s/Str
                 (s/optional-key :bigQueryTable) s/Str
                 (s/optional-key :error-out) s/Bool

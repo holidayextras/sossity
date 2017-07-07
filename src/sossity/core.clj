@@ -182,6 +182,9 @@
         dataset_name (attr g node :dataset_name)
         time_window (attr g node :time_window)
         topic_name (attr g node :topic_name)
+        cloudsql_vm (attr g node :cloudsql_vm)
+        MYSQLUSER (attr g node :MYSQLUSER)
+        MYSQLPASS (attr g node :MYSQLPASS)
         docker_image (first (remove clojure.string/blank? [(attr g node :docker_image) (get-in conf [:config-file :config :default-sink-docker-image])]))
         batch-size (or (attr g node :batch_size) sink-buffer-size)
         merge_insert (attr g node :merge_insert)
@@ -199,6 +202,9 @@
                                       :proj_name proj_name
                                       :sub_name sub_name
                                       :topic_name topic_name
+                                      :cloudsql_vm cloudsql_vm
+                                      :MYSQLUSER MYSQLUSER
+                                      :MYSQLPASS MYSQLPASS
                                       :bucket_name bucket_name
                                       :rsys_pass rsys_pass
                                       :time_window time_window
