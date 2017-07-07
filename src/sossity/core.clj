@@ -17,7 +17,7 @@
    [schema.core :as s])
   (:gen-class))
 
-(defn sub-suffix [] (str "-sub-"))
+(defn sub-suffix [] (str "-to-"))
 
 (def app-prefix "googleappengine_app")
 (def df-prefix "googlecli_dataflow")
