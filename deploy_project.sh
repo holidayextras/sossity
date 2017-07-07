@@ -23,7 +23,7 @@ fi
 
 #  write out jar file versions and names to VERSIONS.txt file and save the 
 #  application name to an env var
-version=`ls -1 target/*.jar  | cut -d "/" -f 2 | tee VERSIONS.txt | grep -v original | tail -n 1 | cut -d "-" -f 1`
+version=`ls -1 target/*.jar  | cut -d "/" -f 2 | tee VERSIONS.txt | grep -v original | tail -n 1 | cut -d "-" -f 2`
 
 set +x
 echo $GOOGLE_CREDENTIALS > account.json
