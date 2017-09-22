@@ -22,12 +22,13 @@
 (def app-prefix "googleappengine_app")
 (def df-prefix "googlecli_dataflow")
 (def pt-prefix "google_pubsub_topic")
-(def replication-controller-name-regex #"([a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)")
 (def angledream-class "com.acacia.angleddream.Main")
 (def sink-retries 3)
 (def sink-buffer-size 750)
 (def sink-container "${google_container_cluster.hx_fstack_cluster.name}")
 (def default-bucket-location "EU")
+(def default-storage-class "COLDLINE")
+(def default-ack-deadline 60)
 (def default-force-bucket-destroy false)
 
 (def external-port 8080)
@@ -187,7 +188,7 @@
   "make a subscription for every node of type gcs based on the inbound edge [for now should only be 1 inbound edge]"
   (let [name (str (attr g edge :name) (attr g node :sub-name) (clojure.string/lower-case (str node)))
         topic (attr g edge :name)]
-    {name {:name name :topic topic :depends_on [(str pt-prefix "." (attr g edge :name))]}}))
+    {name {:name name :topic topic :ack_deadline_seconds default-ack-deadline :depends_on [(str pt-prefix "." (attr g edge :name))]}}))
 
 (defn create-subs [g node]
   (apply merge (map #(create-sub g % node) (in-edges g node))))
