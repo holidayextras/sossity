@@ -438,8 +438,8 @@
   (output-terraform-file (read-graphs input) output))
 
 (defn view-graph
-  [input]
-  (loom.io/view (create-dag (read-graphs input) (config-md (read-graphs input)))))
+  [input f]
+  (loom.io/dot (create-dag (read-graphs input) (config-md (read-graphs input))) f))
 
 (defn test-cluster [a-graph]
   "given a config map, test a cluster. returns [graph input-pipes]"
@@ -477,7 +477,7 @@
       (println opts)
       (if-not opts (println (:summary parsed)))
       (if (:errors parsed) (println "ERROR:" (:errors parsed))
-          (if (:view opts) (view-graph conf)
+          (if (:view opts) (view-graph conf "output.dot")
               (if (:sim opts)
                 (do
                   (file-tester (read-graphs (conj conf (:testfile opts))))
