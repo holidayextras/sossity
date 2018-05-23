@@ -18,7 +18,7 @@
 
 (def cluster {:name s/Str :initial_node_count s/Int :master_auth {:username s/Str :password s/Str} :node_config {:oauth_scopes [s/Str] :machine_type s/Str}})
 
-(def opts {:maxNumWorkers s/Int :numWorkers s/Int :zone s/Str :autoscalingAlgorithm s/Str :stagingLocation s/Str})
+(def opts {:maxNumWorkers s/Int :numWorkers s/Int :region s/Str :zone s/Str :autoscalingAlgorithm s/Str :stagingLocation s/Str})
 
 (def provider {:credentials s/Str :project s/Str})
 
