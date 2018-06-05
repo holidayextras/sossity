@@ -439,7 +439,7 @@
 
 (defn view-graph
   [input]
-  (loom.io/view (create-dag (read-graphs input) (config-md (read-graphs input)))))
+  (loom.io/dot (create-dag (read-graphs input) (config-md (read-graphs input))) "output.dot"))
 
 (defn test-cluster [a-graph]
   "given a config map, test a cluster. returns [graph input-pipes]"
